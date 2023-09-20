@@ -34,9 +34,10 @@ public class PrimaryController implements Initializable {
     
     @FXML TableColumn<Exercicio, String> colNomeExerc;
     @FXML TableColumn<Exercicio, Integer> colRepeticoes;
-    @FXML TableColumn<Exercicio, String> colTipoExerc;
+    @FXML TableColumn<Exercicio, String> colTipoExerc; 
 
 
+    
     public void adicionaExercicio(){
         var exercicio = new Exercicio(
             null,
