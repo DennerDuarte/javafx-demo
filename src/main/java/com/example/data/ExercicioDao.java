@@ -1,53 +1,66 @@
 package com.example.data;
 
-import java.sql.DriverManager;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.example.model.Exercicio;
+import com.example.model.Treino;
 
 public class ExercicioDao {
 
-    static final String URL = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL";
-    static final String USER = "rm550531";
-    static final String PASS = "300704";
+    private static Connection conexao;
+
+    public ExercicioDao() throws SQLException {
+        conexao = ConnectioFactory.getConnection();
+    }
 
     public static void inserir(Exercicio exercicio) throws SQLException {
-        var conexao = DriverManager.getConnection(URL, USER, PASS);
-
-        var sql = "INSERT INTO exercicios (id_exerc, exercicio, tipoExerc, repeticao) VALUES (?, ?, ?, ?) ";
+        var sql = "INSERT INTO exercicios (nomeExerc, repeticoes, treino) VALUES(?, ?, ?)";
         var comando = conexao.prepareStatement(sql);
-        comando.setLong(1, exercicio.getId());
-        comando.setString(1, exercicio.getExercicio());
-        comando.setInt(2, exercicio.getRepeticao());
-        comando.setString(3, exercicio.getTipoExerc());
-
+        comando.setString(1, exercicio.getNomeExerc());
+        comando.setInt(2, exercicio.getRepeticoes());
+        comando.setString(3, exercicio.getTreino().getTipoTreino());
         comando.executeUpdate();
-
-        conexao.close();
-
     }
 
-    public static List<Exercicio> buscarTodos() throws SQLException {
-        var lista = new ArrayList<Exercicio>();
+    public static List<Exercicio> buscarTodos() throws SQLException{
+        var listaExerc = new ArrayList<Exercicio>();
 
-        var conexao = DriverManager.getConnection(URL, USER, PASS);
-        var comando = conexao.prepareStatement("SELECT * FROM exercicio");
+        var comando = conexao.prepareStatement("SELECT exercicio.*, treino.nomeAluno, treino.tipoTreino FROM exercicios INNER JOIN treino on exercicio.treino_id=treino.id");
         var resultado = comando.executeQuery();
 
-        while (resultado.next()) {
-            lista.add(new Exercicio(
+        while(resultado.next()){
+            listaExerc.add(new Exercicio(
+                resultado.getLong("id"),
+                resultado.getString("nomeExerc"),
+                resultado.getInt("repeticoes"),
+                new Treino(
                     resultado.getLong("id"),
-                    resultado.getString("exercicio"),
-                    resultado.getString("tipoExerc"),
-                    resultado.getInt("repeticao")
+                    resultado.getString("nomeAluno"),
+                    resultado.getString("tipoTreino")
+                )
             ));
-                    
         }
-
-        conexao.close();
-        return lista;
+        return listaExerc;
     }
+
+	public static void apagar(Long id) throws SQLException{
+        var comando = conexao.prepareStatement("DELETE FROM exercicios WHERE id =?");
+        comando.setLong(1, id);
+        comando.executeUpdate();
+	}
+
+    public static void atualizar(Exercicio exercicio) throws SQLException {
+        var comando = conexao.prepareStatement("UPDATE exercicios SET nomeAluno = ?, repeticoes = ? WHERE id=?");
+        comando.setString(1, exercicio.getNomeExerc());
+        comando.setInt(2, exercicio.getRepeticoes());
+        comando.setLong(3, exercicio.getId());
+        comando.executeUpdate();
+        
+    }
+
+   
 
 }

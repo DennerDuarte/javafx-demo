@@ -3,16 +3,16 @@ package com.example.model;
 public class Exercicio {
     
     private Long id;
-    private String exercicio;
-    private String tipoExerc;
-    private int repeticao;
-    
-    
-    public Exercicio(Long id, String exercicio, String tipoExerc, int repeticao) {
+    private String nomeExerc;
+    private Integer repeticoes;
+    private Treino treino;
+
+
+    public Exercicio(Long id, String nomeExerc, Integer repeticoes, Treino treino) {
         this.id = id;
-        this.exercicio = exercicio;
-        this.tipoExerc = tipoExerc;
-        this.repeticao = repeticao;
+        this.nomeExerc = nomeExerc;
+        this.repeticoes = repeticoes;
+        this.treino = treino;
     }
 
 
@@ -26,38 +26,51 @@ public class Exercicio {
     }
 
 
-    public String getExercicio() {
-        return exercicio;
+    public String getNomeExerc() {
+        return nomeExerc;
     }
 
 
-    public void setExercicio(String exercicio) {
-        this.exercicio = exercicio;
+    public void setNomeExerc(String nomeExerc) {
+        this.nomeExerc = nomeExerc;
     }
 
 
-    public String getTipoExerc() {
-        return tipoExerc;
+    public Integer getRepeticoes() {
+        return repeticoes;
     }
 
 
-    public void setTipoExerc(String tipoExerc) {
-        this.tipoExerc = tipoExerc;
+    public void setRepeticoes(Integer repeticoes) {
+        this.repeticoes = repeticoes;
     }
 
 
-    public int getRepeticao() {
-        return repeticao;
+    public Treino getTreino() {
+        return treino;
     }
 
 
-    public void setRepeticao(int repeticao) {
-        this.repeticao = repeticao;
+    public void setTreino(Treino treino) {
+        this.treino = treino;
     }
+
+
+	public Exercicio NomeExerc(String nomeExerc) {
+        this.nomeExerc = nomeExerc;
+		return this;
+	}
+
+
+    public Exercicio repeticoes(Integer repeticoes) {
+        this.repeticoes = repeticoes;
+        return this;
+    }
+
     
+
     
-   
-    
+
     
     
 }
